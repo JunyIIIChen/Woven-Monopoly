@@ -21,9 +21,9 @@ class Player
     property.owner = self
   end
 
-  def pay_rent(amount)
-    @money -= amount
-  end
+  # def pay_rent(amount)
+  #   @money -= amount
+  # end
 
   
   def is_bankrupt?
