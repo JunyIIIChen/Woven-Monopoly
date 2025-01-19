@@ -1,5 +1,6 @@
 require 'json'
 
+
 class Board
   attr_accessor :locations
 
@@ -10,9 +11,9 @@ class Board
   def load_board(file)
     JSON.parse(File.read(file)).map do |property|
       Property.new(property['name'], 
-      property['color'], 
+      property['colour'], 
       property['price'], 
-      property['rent'])
+      property['type'])
     end
   end
 
