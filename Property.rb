@@ -13,7 +13,7 @@ class Property
     !@owner.nil?
   end
 
-  def calculate_rental_fee
+  def calculate_rental_price
     # Double price if owner owns all properties of the same colour
     if @owner && @owner.properties.count { |p| p.colour == @colour } > 1
       @price * 2

@@ -5,7 +5,6 @@ require_relative '../Player'
 class TestPlayer < Minitest::Test
   def setup
     @property = Property.new("The Burvale", "Brown", 1,"property")
-    # @owner = Player.new('Patrick Chen')
   end
 
   def test_initial_attributes
@@ -15,4 +14,21 @@ class TestPlayer < Minitest::Test
     assert_equal 'property', @property.type
     assert_equal nil, @property.owner
   end
+
+  def test_property_owned
+    assert_equal false, @property.owned?
+
+    # check property is owned
+    @property.owner = Player.new('Patrick Chen')
+    assert_equal true, @property.owned?
+  end 
+
+  def test_calculate_rental_price
+    @property.owner = @owner
+    assert_equal 1, @property.calculate_rental_price
+  end
+
+  def test_calculate_rental_price_with_double_price
+    #owner owns all colour
+    
 end
