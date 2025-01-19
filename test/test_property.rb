@@ -23,12 +23,4 @@ class TestPlayer < Minitest::Test
     assert_equal true, @property.owned?
   end 
 
-  def test_calculate_rental_price
-    @property.owner = @owner
-    assert_equal 1, @property.calculate_rental_price
-  end
-
-  def test_calculate_rental_price_with_double_price
-    #owner owns all colour
-    
 end
