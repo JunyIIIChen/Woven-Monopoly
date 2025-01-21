@@ -90,7 +90,8 @@ class Monopoly
   end
 
   def print_game_result
-    winner = @players.reject{ |player| player.is_bankrupt? }.max_by{ |player| player.money }
+    # select player who are not bankrupt, and get max money
+    winner = @players.select{ |player| !player.is_bankrupt? }.max_by{ |player| player.money }
     puts "Game Over! The winner is #{winner.name} with $#{winner.money}."
     @players.each do |player|
       puts "#{player.name} has $#{player.money} and is on space #{@board.locations[player.position].name}."
