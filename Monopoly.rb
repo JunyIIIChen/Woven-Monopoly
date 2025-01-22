@@ -65,7 +65,6 @@ class Monopoly
     #
   end
 
-
   def rent_settlement(player,property)
 
     rent_fee = calculate_rent_price(property)

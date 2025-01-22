@@ -42,18 +42,47 @@ class TestMonopoly < Minitest::Test
   def test_calculate_rent_price
     # get two green properties, Betty's Burgers and YOMG
     property = @game.board.get_property(5)
-    second_property = @game.board.get_property(6)
+    property2 = @game.board.get_property(6)
 
     # create owner, give these 2 properties to owner
     owner = Player.new("Owner")
     property.owner = owner
     owner.properties << property    
-    second_property.owner = owner
-    owner.properties << second_property
+    property2.owner = owner
+    owner.properties << property2
     
     # property 1 price is 3
     rent = @game.calculate_rent_price(property)
     
     assert_equal 6, rent
+  end
+
+  def test_pay_rent
+    player = @game.players[0]
+    player2 = @game.players[1]
+    property = @game.board.get_property(1)
+    # Set player2 as the owner of the property
+    property.owner = player2
+
+    # Simulate player1 landing on player2's property
+    @game.take_turn_to_move(player, @game.dice_rolls[0])
+
+    #player pay 1 to player2
+    assert_equal 15, player.money
+    assert_equal 17, player2.money
+  end
+
+  def test_buy_property
+    property = @game.board.get_property(1)
+    player1 = @game.players[0]
+
+    initial_money_player1 = player1.money
+
+    # to test(first) property
+    @game.take_turn_to_move(player1, @game.dice_rolls[0])  
+    assert_equal property, @game.board.get_property(player1.position)
+
+    # Ensure the property belongs to the buyer
+    assert_equal player1, property.owner
   end
 end
