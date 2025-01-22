@@ -24,14 +24,23 @@ class TestMonopoly < Minitest::Test
   def test_pass_go_get_one_dollar
     player = @game.players[0]
     initial_money = player.money
-
+    player.position = @game.board.locations.size - 1
+    
+    # assert_equal @game.board.locations.size - 1, player.position
     # assert_equal 16, player.money
 
-    player.position = @game.board.locations.size - 1
+    
+    assert_equal 8, player.position
 
-    @game.take_turn_to_move(player,3)
 
-    assert_equal 17, player.money
+
+
+    @game.take_turn_to_move(player,2)
+    # assert_equal 2, player.position
+    
+    assert_equal 1, player.position
+    
+    assert_equal 16, player.money
   end
   
 end

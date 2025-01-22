@@ -10,8 +10,11 @@ class Player
   end
 
   def move(steps, board_size)
+    previous_position = @position
+
     @position = (@position + steps) % board_size
-    @money += 1 if @position < steps # Pass GO
+
+    @money += 1 if @position < previous_position # Pass GO
   end
 
   def buy_property(property)
