@@ -10,6 +10,12 @@ class TestMonopoly < Minitest::Test
   end
 
   def test_initialize_game
+    #correct load dice rolls
+    refute_empty @game.dice_rolls
+
+    #correct load board
+    refute_empty @game.board.locations
+
     #test players have been generated
     player_names = @game.players.map{ |player| player.name }
 
@@ -20,27 +26,34 @@ class TestMonopoly < Minitest::Test
     assert_equal 4, @game.players.size
   end
 
-
+  # test pass go get money, including stop at place go
   def test_pass_go_get_one_dollar
     player = @game.players[0]
     initial_money = player.money
+
+    # set player on the last place, move one step forward to 0, the player get one dollar.
     player.position = @game.board.locations.size - 1
-    
-    # assert_equal @game.board.locations.size - 1, player.position
-    # assert_equal 16, player.money
-
-    
-    assert_equal 8, player.position
-
-
-
-
-    @game.take_turn_to_move(player,2)
-    # assert_equal 2, player.position
-    
-    assert_equal 1, player.position
-    
-    assert_equal 16, player.money
+    @game.take_turn_to_move(player,1)
+    assert_equal 0, player.position   
+    assert_equal 17, player.money
+    # assert_equal  "The Burvale", player.properties[0].name
   end
-  
+
+  def test_calculate_rent_price
+    # get two green properties, Betty's Burgers and YOMG
+    property = @game.board.get_property(5)
+    second_property = @game.board.get_property(6)
+
+    # create owner, give these 2 properties to owner
+    owner = Player.new("Owner")
+    property.owner = owner
+    owner.properties << property    
+    second_property.owner = owner
+    owner.properties << second_property
+    
+    # property 1 price is 3
+    rent = @game.calculate_rent_price(property)
+    
+    assert_equal 6, rent
+  end
 end
