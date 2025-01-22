@@ -61,10 +61,10 @@ class TestMonopoly < Minitest::Test
     player = @game.players[0]
     player2 = @game.players[1]
     property = @game.board.get_property(1)
-    # Set player2 as the owner of the property
+    # set player2 as the owner of the property
     property.owner = player2
 
-    # Simulate player1 landing on player2's property
+    # simulate player1 landing on player2's property
     @game.take_turn_to_move(player, @game.dice_rolls[0])
 
     #player pay 1 to player2
@@ -82,7 +82,26 @@ class TestMonopoly < Minitest::Test
     @game.take_turn_to_move(player1, @game.dice_rolls[0])  
     assert_equal property, @game.board.get_property(player1.position)
 
-    # Ensure the property belongs to the buyer
+    # ensure the property belongs to the buyer
     assert_equal player1, property.owner
   end
+
+  def test_bankrupt_and_winner
+    player1 = @game.players[0]
+    player2 = @game.players[1]
+    player3 = @game.players[2]
+    player2.money = 222
+    player3.money = 123
+
+    # simulate player1 going bankrupt
+    player1.money = 0
+    player1.is_bankrupt?
+
+    # assert that the winner is the one with the most money and not bankrupt
+    winner = @game.players.select { |player| !player.is_bankrupt? }.max_by { |player| player.money }
+    assert_equal 222, winner.money
+    assert_equal "Billy", winner.name
+
+  end
+
 end

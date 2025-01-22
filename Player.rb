@@ -30,6 +30,6 @@ class Player
 
   
   def is_bankrupt?
-    @money < 0
+    @money <= 0
   end
 end
