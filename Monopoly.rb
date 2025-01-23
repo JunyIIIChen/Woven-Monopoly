@@ -7,14 +7,14 @@ require_relative 'Property'
 class Monopoly
   attr_accessor :players, :board, :dice_rolls
 
-  # Initialize the Monopoly game with the board and dice roll data.
-  # @param board_file [String] The file containing board information (JSON).
-  # @param roll_dice_file [String] The file containing dice roll data (JSON).
-  def initialize(board_file, roll_dice_file)
-    # Load dice rolls from the specified file.
-    @dice_rolls = load_dice_rolls("rolls_1.json")
+  def initialize(board_file, roll_dice_file = nil)
+    if roll_dice_file.nil?
+      puts "Select dice rolls file (1 or 2):"
+      choice = gets.chomp
+      roll_dice_file = choice == "2" ? "rolls_2.json" : "rolls_1.json"
+    end
     
-    # Load the board from the specified file.
+    @dice_rolls = load_dice_rolls(roll_dice_file)
     @board = Board.new("board.json")
 
     # Initialize the players for the game.
@@ -27,8 +27,6 @@ class Monopoly
   end
 
   # Load dice roll data from a JSON file.
-  # @param file [String] Path to the JSON file containing dice rolls.
-  # @return [Array<Integer>] Array of dice roll values.
   def load_dice_rolls(file)
     rolls = JSON.parse(File.read(file))
     return rolls
@@ -63,13 +61,11 @@ class Monopoly
     # Calculate the board size for wrapping around.
     board_size = @board.locations.size
 
-    # Move the player based on the dice roll.
     player.move(roll, board_size)
 
     # Get the property at the player's current position.
     current_property = @board.get_property(player.position)
 
-    # Handle property interactions based on type and ownership.
     if current_property.type == "property"
       if current_property.owned?
         # Player pays rent if the property is owned by another player.
@@ -85,22 +81,20 @@ class Monopoly
   # @param player [Player] The player paying rent.
   # @param property [Property] The property requiring rent payment.
   def rent_settlement(player, property)
-    # Calculate the rent fee for the property.
+
     rent_fee = calculate_rent_price(property)
 
-    # Deduct the rent fee from the player and add it to the owner's balance.
     player.pay_rent(rent_fee)
     property.owner.money += rent_fee
   end
 
   # Calculate the rent price for a given property.
-  # Rent doubles if the owner holds all properties of the same color.
   # @param property [Property] The property being evaluated.
   # @return [Integer] The calculated rent amount.
   def calculate_rent_price(property)
     rent = property.price
 
-    # Check if the owner has a monopoly on properties of the same color.
+    # Rent doubles if the owner holds all properties of the same color.
     if property.owner.properties.select { |prop| prop.colour == property.colour }.size == 
        @board.locations.count { |prop| prop.colour == property.colour }
       rent *= 2
@@ -125,8 +119,7 @@ end
 # Run the game if the script is executed directly.
 if __FILE__ == $PROGRAM_NAME
   board_file = 'board.json'
-  dice_rolls_file = 'rolls_1.json'
 
-  game = Monopoly.new(board_file, dice_rolls_file)
+  game = Monopoly.new(board_file)
   game.game_start
 end

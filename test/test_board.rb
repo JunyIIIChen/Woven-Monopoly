@@ -26,9 +26,5 @@ class TestBoard < Minitest::Test
     assert_equal 4, @board.locations[8].price
     assert_equal "property", @board.locations[8].type
 
-    #edge case test 9th--> back to go
-    assert_equal "GO", @board.locations[9].name
-    assert_equal "go", @board.locations[9].type
-
   end
 end

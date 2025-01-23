@@ -15,6 +15,7 @@ class TestPlayer < Minitest::Test
     assert_equal nil, @property.owner
   end
 
+  # test initial property
   def test_property_owned
     assert_equal false, @property.owned?
 
