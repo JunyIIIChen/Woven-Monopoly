@@ -46,6 +46,6 @@ class Player
   # Check if the player is bankrupt (i.e., they have no money).
   # @return [Boolean] True if the player's money is less than or equal to 0, false otherwise.
   def is_bankrupt?
-    @money <= 0 
+    @money < 0
   end
 end
